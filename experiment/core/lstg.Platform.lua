@@ -1,6 +1,10 @@
+---@meta
+--- LuaSTG Sub Experimental Documentation: Platform Operations
+--------------------------------------------------------------------------------
 
---- [LuaSTG Sub v0.19.104 新增]  
---- 可以控制 Windows 11 的窗口圆角样式是否启用  
----@param allow boolean
-function lstg.SetWindowCornerPreference(allow)
+--- Added in LuaSTG Sub v0.19.104.
+---
+--- Tells Windows 11 to not round the corners of LuaSTG window.
+---@param enable_rounding boolean
+function lstg.SetWindowCornerPreference(enable_rounding)
 end

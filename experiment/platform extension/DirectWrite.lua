@@ -1,6 +1,5 @@
---------------------------------------------------------------------------------
---- Windows 平台 DirectWrite 拓展
---- 璀境石
+---@meta
+--- LuaSTG Sub Experimental Documentation: Windows DirectWrite
 --------------------------------------------------------------------------------
 
 ---@diagnostic disable: missing-return
@@ -9,83 +8,8 @@
 local M = {}
 
 --------------------------------------------------------------------------------
---- example
 
-local function example()
-    --- step 0: cimport module
-
-    ---@type DirectWrite
-    local DirectWrite = require("DirectWrite")
-
-    --- step 1: create a font collection
-
-    -- let's begin with Windows built-in font 微软雅黑
-    local font_file_list = {}
-    ---@param path string
-    local function insert_if_exist(path)
-        if lstg.FileManager.FileExist(path) then
-            table.insert(font_file_list, path)
-        end
-    end
-    -- Windows 8, 8.1, 10, 11
-    insert_if_exist("C:/Windows/Fonts/msyh.ttc")
-    insert_if_exist("C:/Windows/Fonts/msyhbd.ttc")
-    insert_if_exist("C:/Windows/Fonts/msyhl.ttc")
-    -- Windows 7 special case (fallback)
-    if #font_file_list < 1 then
-        insert_if_exist("C:/Windows/Fonts/msyh.ttf")
-        insert_if_exist("C:/Windows/Fonts/msyhbd.ttf")
-    end
-    local font_collection = DirectWrite.CreateFontCollection(font_file_list)
-    -- optional debug information
-    lstg.Print(string.format("Font Collection Detail:\n%s", font_collection:GetDebugInformation()))
-
-    --- step 2: create a text format
-
-    local text_format = DirectWrite.CreateTextFormat(
-        "微软雅黑", -- font family name (see DirectWrite.FontCollection:GetDebugInformation result)
-        font_collection,
-        DirectWrite.FontWeight.Regular,
-        DirectWrite.FontStyle.Normal,
-        DirectWrite.FontStretch.Normal,
-        16.0, -- font size in DIP (device independent point, or pixel)
-        ""
-    )
-
-    --- step 3: create a text layout
-
-    local text_layout_1 = DirectWrite.CreateTextLayout(
-        "Hello, DirectWrite!\n你好，DirectWrite！",
-        text_format,
-        256, -- layout box width
-        64 -- layout box height
-    )
-
-    local text_layout_2 = DirectWrite.CreateTextLayout(
-        "海内存知己，天涯若比邻。",
-        text_format,
-        256, -- layout box width
-        64 -- layout box height
-    )
-
-    --- step 4: create LuaSTG texture resource from text layout
-
-    DirectWrite.CreateTextureFromTextLayout(
-        text_layout_1,
-        "global", -- resource pool type
-        "tex:hello-dwrite-1" -- texture resource name
-    )
-
-    DirectWrite.CreateTextureFromTextLayout(
-        text_layout_2,
-        "global", -- resource pool type
-        "tex:hello-dwrite-2", -- texture resource name
-        4 -- optional stroke width
-    )
-end
-
---------------------------------------------------------------------------------
---- C enum
+--- C enums
 
 ---@class DirectWrite.FontStretch
 local FontStretch = {}
@@ -172,6 +96,7 @@ WordWrapping.Wrap = 0
 WordWrapping.NoWrap = 1
 
 --------------------------------------------------------------------------------
+
 --- DWRITE_TEXT_METRICS
 
 ---@class DirectWrite.TextMetrics
@@ -196,6 +121,7 @@ TextMetrics.maxBidiReorderingDepth = 0
 TextMetrics.lineCount = 0
 
 --------------------------------------------------------------------------------
+
 --- DWRITE_OVERHANG_METRICS
 
 ---@class DirectWrite.OverhangMetrics
@@ -210,6 +136,7 @@ OverhangMetrics.right = 0.0
 OverhangMetrics.bottom = 0.0
 
 --------------------------------------------------------------------------------
+
 --- IDWriteFontCollection
 
 ---@class DirectWrite.FontCollection
@@ -220,12 +147,14 @@ function FontCollection:GetDebugInformation()
 end
 
 --------------------------------------------------------------------------------
+
 --- IDWriteTextFormat
 
 ---@class DirectWrite.TextFormat
 local TextFormat = {}
 
 --------------------------------------------------------------------------------
+
 --- IDWriteTextLayout
 
 ---@class DirectWrite.TextLayout
@@ -363,6 +292,7 @@ function TextLayout:GetMaxHeight()
 end
 
 --------------------------------------------------------------------------------
+
 --- IDwriteFactory
 
 ---@param font_files string[]
@@ -401,47 +331,42 @@ function M.CreateTextLayout(text, text_format, max_width, max_height)
 end
 
 --------------------------------------------------------------------------------
+
 --- TextRenderer (DirectWrite & LuaSTG)
 
 ---@class DirectWrite.TextRenderer
 local TextRenderer = {}
 
---- 文本颜色  
 ---@param color lstg.Color
 function TextRenderer:SetTextColor(color)
 end
 
---- 描边颜色  
 ---@param color lstg.Color
 function TextRenderer:SetTextOutlineColor(color)
 end
 
---- 描边宽度（像素）  
----@param value number
+---@param value number (in pixels)
 function TextRenderer:SetTextOutlineWidth(value)
 end
 
---- 阴影颜色  
 ---@param color lstg.Color
 function TextRenderer:SetShadowColor(color)
 end
 
---- 阴影半径（像素），内部算法为高斯模糊  
----@param value number
+--- Includes Gaussian blurring
+---@param value number (in pixels)
 function TextRenderer:SetShadowRadius(value)
 end
 
---- 设置阴影的拓展，值范围为 0.0 到 1.0  
---- 对应 PS 图层效果投影功能的拓展参数（0% 到 100%）  
----@param value number
+--- Corresponds to the expansion parameter (0% to 100%) of the projection function of the PS layer effect.
+---@param value number value between 0 and 1
 function TextRenderer:SetShadowExtend(value)
 end
 
---- 在渲染目标上绘制文本  
---- res_name 为通过 lstg.CreateRenderTarget 创建的渲染目标资源  
---- 坐标系的原点位于左上角，且 Y 轴朝下  
---- 坐标系单位为像素  
----@param res_name string
+--- Draws text on the render target.  
+--- The origin of the coordinate system is in the upper-left corner and the Y-axis is facing down.  
+--- The coordinate system is in pixels.
+---@param res_name string Name of the render target resource, as created by lstg.CreateRenderTarget.
 ---@param text_layout DirectWrite.TextLayout
 ---@param offset_x number
 ---@param offset_y number
@@ -453,17 +378,18 @@ function M.CreateTextRenderer()
 end
 
 --------------------------------------------------------------------------------
+
 --- DirectWrite & LuaSTG
 
 ---@param text_layout DirectWrite.TextLayout
 ---@param resource_pool_type lstg.ResourcePoolType
 ---@param texture_name string
----@param outline_width number
----@overload fun(text_layout:DirectWrite.TextLayout, resource_pool_type:lstg.ResourcePoolType, texture_name:string)
+---@param outline_width number|nil
 function M.CreateTextureFromTextLayout(text_layout, resource_pool_type, texture_name, outline_width)
 end
 
 --------------------------------------------------------------------------------
+
 --- DirectWrite & Windows Imaging Component
 
 --- save TextLayout to png file
@@ -475,6 +401,80 @@ function M.SaveTextLayoutToFile(text_layout, file_path, outline_width)
 end
 
 --------------------------------------------------------------------------------
---- end
 
 return M
+
+-- Example Usage:
+
+--[[
+--- step 0: cimport module
+
+---@type DirectWrite
+local DirectWrite = require("DirectWrite")
+
+--- step 1: create a font collection
+
+-- let's begin with Windows built-in font MS YaHei
+local font_file_list = {}
+---@param path string
+local function insert_if_exist(path)
+    if lstg.FileManager.FileExist(path) then
+        table.insert(font_file_list, path)
+    end
+end
+-- Windows 8, 8.1, 10, 11
+insert_if_exist("C:/Windows/Fonts/msyh.ttc")
+insert_if_exist("C:/Windows/Fonts/msyhbd.ttc")
+insert_if_exist("C:/Windows/Fonts/msyhl.ttc")
+-- Windows 7 special case (fallback)
+if #font_file_list < 1 then
+    insert_if_exist("C:/Windows/Fonts/msyh.ttf")
+    insert_if_exist("C:/Windows/Fonts/msyhbd.ttf")
+end
+local font_collection = DirectWrite.CreateFontCollection(font_file_list)
+-- optional debug information
+lstg.Print(string.format("Font Collection Detail:\n%s", font_collection:GetDebugInformation()))
+
+--- step 2: create a text format
+
+local text_format = DirectWrite.CreateTextFormat(
+    "MS YaHei", -- font family name (see DirectWrite.FontCollection:GetDebugInformation result)
+    font_collection,
+    DirectWrite.FontWeight.Regular,
+    DirectWrite.FontStyle.Normal,
+    DirectWrite.FontStretch.Normal,
+    16.0, -- font size in DIP (device independent point, or pixel)
+    ""
+)
+
+--- step 3: create a text layout
+
+local text_layout_1 = DirectWrite.CreateTextLayout(
+    "Hello, DirectWrite!\n你好，DirectWrite！",
+    text_format,
+    256, -- layout box width
+    64 -- layout box height
+)
+
+local text_layout_2 = DirectWrite.CreateTextLayout(
+    "海内存知己，天涯若比邻。",
+    text_format,
+    256, -- layout box width
+    64 -- layout box height
+)
+
+--- step 4: create LuaSTG texture resource from text layout
+
+DirectWrite.CreateTextureFromTextLayout(
+    text_layout_1,
+    "global", -- resource pool type
+    "tex:hello-dwrite-1" -- texture resource name
+)
+
+DirectWrite.CreateTextureFromTextLayout(
+    text_layout_2,
+    "global", -- resource pool type
+    "tex:hello-dwrite-2", -- texture resource name
+    4 -- optional stroke width
+)
+]]

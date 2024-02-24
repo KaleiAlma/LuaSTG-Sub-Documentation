@@ -1,9 +1,56 @@
----@diagnostic disable: missing-return
+---@meta
+--- LuaSTG Sub Experimental Documentation: Shader Objects
+--------------------------------------------------------------------------------
+
+---@class lstg.PostEffectShader
+local PostEffectShader = {}
+
+---@param name string
+---@param resource_name string
+function PostEffectShader:setTexture(name, resource_name)
+end
+
+---@param name string
+---@param value number
+function PostEffectShader:setFloat(name, value)
+end
+
+---@param name string
+---@param x number
+---@param y number
+function PostEffectShader:setFloat2(name, x, y)
+end
+
+---@param name string
+---@param x number
+---@param y number
+---@param z number
+function PostEffectShader:setFloat3(name, x, y, z)
+end
+
+---@param name string
+---@param x number
+---@param y number
+---@param z number
+---@param w number
+function PostEffectShader:setFloat4(name, x, y, z, w)
+end
+
+--- Creates a shader object from an HLSL file.
+---@param file_path string
+---@return lstg.PostEffectShader
+function lstg.CreatePostEffectShader(file_path)
+end
+
+---@param post_effect_shader lstg.PostEffectShader
+---@param blend lstg.BlendMode
+function lstg.PostEffect(post_effect_shader, blend)
+end
 
 --------------------------------------------------------------------------------
---- example
 
-local example_hlsl = [[
+-- Reference Shader 
+--[[
     Texture2D    g_texture : register(t0);
     SamplerState g_texture_sampler : register(s0);
     
@@ -47,84 +94,31 @@ local example_hlsl = [[
     }
 ]]
 
-local function example()
-    -- create
+-- Example Usage:
+--[=[
+-- create
 
-    lstg.CreateRenderTarget("rt:background")
-    lstg.CreateRenderTarget("rt:mask")
-    local shader = lstg.CreatePostEffectShader("example.hlsl")
+lstg.CreateRenderTarget("rt:background")
+lstg.CreateRenderTarget("rt:mask")
+local shader = lstg.CreatePostEffectShader("example.hlsl")
 
-    -- render
+-- render
 
-    lstg.PushRenderTarget("rt:background")
-    lstg.RenderClear(lstg.Color(255, 0, 0, 0))
-    lstg.PopRenderTarget()
+lstg.PushRenderTarget("rt:background")
+lstg.RenderClear(lstg.Color(255, 0, 0, 0))
+lstg.PopRenderTarget()
 
-    lstg.PushRenderTarget("rt:mask")
-    lstg.RenderClear(lstg.Color(255, 255, 255, 255))
-    lstg.PopRenderTarget()
+lstg.PushRenderTarget("rt:mask")
+lstg.RenderClear(lstg.Color(255, 255, 255, 255))
+lstg.PopRenderTarget()
 
-    local w, h = lstg.GetTextureSize("rt:background")
-    shader:setFloat2("g_render_target_size", w, h)
-    shader:setFloat4("g_viewport",
-        --[[ left   ]] 10,
-        --[[ top    ]] 10,
-        --[[ right  ]] 640 - 10,
-        --[[ bottom ]] 480 - 10)
-    shader:setTexture("g_render_target", "rt:background")
-    shader:setTexture("g_texture", "rt:mask")
-end
-
---------------------------------------------------------------------------------
---- lstg.PostEffectShader
-
----@class lstg.PostEffectShader
-local PostEffectShader = {}
-
----@param name string
----@param resource_name string
-function PostEffectShader:setTexture(name, resource_name)
-end
-
----@param name string
----@param value number
-function PostEffectShader:setFloat(name, value)
-end
-
----@param name string
----@param x number
----@param y number
-function PostEffectShader:setFloat2(name, x, y)
-end
-
----@param name string
----@param x number
----@param y number
----@param z number
-function PostEffectShader:setFloat3(name, x, y, z)
-end
-
----@param name string
----@param x number
----@param y number
----@param z number
----@param w number
-function PostEffectShader:setFloat4(name, x, y, z, w)
-end
-
---------------------------------------------------------------------------------
---- create
-
----@param file_path string
----@return lstg.PostEffectShader
-function lstg.CreatePostEffectShader(file_path)
-end
-
---------------------------------------------------------------------------------
---- draw
-
----@param post_effect_shader lstg.PostEffectShader
----@param blend lstg.BlendMode
----@overload fun(fxname:string, texname:string, samplerstate:number, blendmode:lstg.BlendMode, floatbuffer:number[][], texparam:string[][])
-function lstg.PostEffect(post_effect_shader, blend)
-end
+local w, h = lstg.GetTextureSize("rt:background")
+shader:setFloat2("g_render_target_size", w, h)
+shader:setFloat4("g_viewport",
+    --[[ left   ]] 10,
+    --[[ top    ]] 10,
+    --[[ right  ]] 640 - 10,
+    --[[ bottom ]] 480 - 10)
+shader:setTexture("g_render_target", "rt:background")
+shader:setTexture("g_texture", "rt:mask")
+]=]

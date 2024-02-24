@@ -1,105 +1,105 @@
-# LuaSTG Sub 更新历史记录
+# LuaSTG Sub update history
 
 * LuaSTG Sub v0.20.16
-    * 音频
-        * 修复：修复音频文件成功加载但仍然报告加载失败的问题
+    * Audio
+        * Fix: Fix audio file successfully loaded but still reported load failure
 * LuaSTG Sub v0.20.15
-    * 引擎基础
-        * 更新：更新 `cjson` 库，修复已知高危漏洞 
-    * 窗口
-        * 修复：修复在多个显示器的设备上，窗口会出现在意料之外的位置的问题
+    * Engine Basics
+        * Update: Update `cjson` library, fix known high-risk vulnerabilities. 
+    * Windows
+        * Fix: Fix issue where windows would appear in unexpected positions on devices with multiple monitors
 * LuaSTG Sub v0.20.14
-    * 引擎基础
-        * 修复：修复 `lstg.DoFile` 在协同程序上执行时可能出现会意料之外的问题，例如出错时报错信息格式不正确、执行成功时返回值不正确等
-        * 修改：现在 `lstg.DoFile` 的行为与 `dofile` 一致，且不再有“严禁在协同程序中调用”的限制
-    * Lua 虚拟机
-        * 修复：修复标准库 `io` 库和 `os` 库部分函数可能存在的内存泄漏
-* LuaSTG Sub v0.20.13
-    * 引擎基础
-        * 新增：`config.json` 新增配置项 `persistent_log_file_max_count` 用于限制持久日志文件最大数量，避免日志文件越来越多
-    * 窗口
-        * 修改：不再默认追踪抢占引擎窗口焦点的窗口，该功能涉及个人隐私，应该交给用户手动开启
-        * 新增：`config.json` 新增配置项 `debug_track_window_focus` 用于开启追踪抢占引擎窗口焦点的窗口的调试功能，可以抓出导致独占全屏失效、按键输入没反应的流氓应用
-    * 游戏对象
-        * 移除：移除多个游戏对象上粒子系统相关 API 的无用警告信息，避免日志文件被写入大量无用内容，涉及的 API：
+    * Engine Basics
+        * Fix: Fixed unexpected problems with `lstg.DoFile` when executed on a co-program, such as incorrectly formatted error messages on errors, incorrect return values on successful execution, etc. * Modified: Now `lstg.DoFile` can be executed on a co-program in an unexpected location.
+        * Changes: `lstg.DoFile` now behaves like `dofile` and no longer has the "forbidden to call in co-programs" restriction.
+    * Lua Virtual Machine
+        * Fix: Fixed a possible memory leak in some functions of the standard `io` and `os` libraries.
+* LuaSTG Sub v0.20.13.
+    * Engine Basics
+        * New: `config.json` adds a new configuration item `persistent_log_file_max_count` to limit the maximum number of persistent log files to avoid more and more log files * Window.
+    * Window
+        * Modified: no longer track the windows that grab the focus of the engine window by default, this feature is related to personal privacy and should be enabled manually by the user.
+        * New: `config.json` adds a new configuration item `debug_track_window_focus` to enable the debugging function of tracking the window that takes the focus of the engine window, so that we can catch the rogue applications that cause the exclusive full screen to fail and the key inputs to be unresponsive.
+    * Game Objects
+        * Remove: removes useless warning messages from particle system related APIs on multiple game objects to avoid log files being written with a lot of useless content involving the APIs:
             * `lstg.ParticleStop`
             * `lstg.ParticleFire`
             * `lstg.ParticleGetn`
             * `lstg.ParticleGetEmission`
             * `lstg.ParticleSetEmission`
 * LuaSTG Sub v0.20.12
-    * 引擎基础
-        * 修复：修复引擎关闭时可能会访问到空指针导致引擎崩溃，且没有报错弹窗或日志记录
-        * 修复：修复通过 `error()`、`error(nil)` 或类似方式抛出内容为 `nil` 的错误时导致引擎崩溃，且没有报错弹窗或日志记录
+    * Engine Basics
+        * Fix: Fix the possibility of accessing a null pointer when the engine is shutting down causing the engine to crash with no error popup or logging
+        * Fix: Fix engine crash when throwing an error with `nil` content via `error()`, `error(nil)` or similar, with no error popup or logging.
 * LuaSTG Sub v0.20.11
-    * 引擎基础
-        * 新增：新增配置项用于禁止程序多开，用于防止出现文件读写冲突导致存档等文件无法写入或者因为同时写入而损坏，具体使用方法请阅读 `doc/specification/引擎配置文件.md`
-    * 游戏对象
-        * 新增：曲线激光对象新增 `CollisionCheckWithWidth` 方法，用于增强 `CollisionCheckWidth` 的功能
-        * 废弃：曲线激光对象 `CollisionCheckWidth` 方法进入废弃状态，未来的版本更新中将会移除
-    * 文档
-        * 修正：修正 API 文档中曲线激光对象 `CollisionCheckWidth` 方法的参数顺序
-* LuaSTG Sub v0.20.10
-    * 资源管理
-        * 新增：初步添加实验性 API 集，资源管理器 API，资源集、资源对象化，具体请看 doc/experiment 文件夹
-    * 图形/渲染
-        * 修改：恢复 `lstg.PostEffect` LuaSTG Plus 版的函数签名，LuaSTG Sub 版的（脑残）函数签名已废弃
-    * Lua 拓展库
-        * 新增：为 `random` 库中的随机数发生器添加 `clone` 、 `serialize` 、 `deserialize` 方法，用于复制、持久化
-        * 移除：移除 `random` 库中的 `sfc` 和 `jsf` 家族随机数发生器
-* LuaSTG Sub v0.20.9
-    * 引擎基础
-        * 更新：`dear-imgui` 更新到 1.89.6
-    * 图形/渲染
-        * 修复：修复了 `lstg.LoadTTF` 加载矢量字体时，如果加载失败不会返回 `false` 的问题
-        * 修改：改进了对现代交换链模型、桌面合成引擎功能是否可用的判断方式，现在会通过 `D3DKMT` 系列 API 获取更多设备功能信息并进行判断，以进一步提升设备兼容性
+    * Engine Basics
+        * New: Add a new configuration item to disable multi-opening of the program, to prevent file read/write conflicts that may cause files such as archives to be unable to be written or corrupted due to simultaneous writes, for details on how to use this, please read `doc/specification/engine-configuration-file.md`.
+    * Game Objects
+        * New: The `CollisionCheckWithWidth` method is added to the CurveLaser object to enhance the functionality of `CollisionCheckWidth`.
+        * Deprecated: The `CollisionCheckWidth` method of the CurveLaser object is deprecated and will be removed in a future update.
+    * Documentation
+        * Fixed: Fixed the parameter order of the CurveLaserObject `CollisionCheckWidth` method in the API documentation.
+* LuaSTG Sub v0.20.10.
+    * Resource Management
+        * New: Preliminary addition of experimental API set, resource manager API, resource set, resource objectification, see doc/experiment folder for details
+    * Graphics/Rendering
+        * Changes: restore `lstg.PostEffect` LuaSTG Plus function signature, LuaSTG Sub (brain-dead) function signature is deprecated.
+    * Lua extension library
+        * New: add `clone`, `serialize`, `deserialize` methods to random number generator in `random` library for copying and persisting.
+        * Remove: remove the `sfc` and `jsf` family of random number generators from the `random` library.
+* LuaSTG Sub v0.20.9.
+    * Engine Basics
+        * Update: `dear-imgui` was updated to 1.89.6.
+    * Graphics/Rendering
+        * Fix: Fixed `lstg.LoadTTF` loading vector fonts not returning `false` if it fails to load them
+        * Modification: Improved the way of determining the availability of modern switching chain model and desktop compositing engine features, now it will get more information about the device features through the `D3DKMT` series of APIs and make a determination to further improve the compatibility of the device.
 * LuaSTG Sub v0.20.8
-    * 引擎基础
-        * 新增：如果系统支持（Windows 10 1803+），将启用新的稳定帧率控制器，替代原有的限速帧率控制器（仅限制帧率，不进行补偿），新的帧率控制器的目标是补偿每帧的时间误差，尽可能让画面显示更稳定，减少画面抖动
-    * 图形/渲染
-        * 修复：有时候切换到别的窗口再回来，会出现掉帧、延迟升高等问题，现在理论上修复了（微软你就说这个是不是没修完的 bug 吧，老版本 Windows 10 就有的 bug，虽然说是在某个补丁中修复了，但是看起来 bug 还是能通过特殊方式触发）（微软：我修复了大部分帧延迟的问题，但是我保留了一部分，我觉得保留一部分特性才知道你用的是 Windows 10+）
+    * Engine Basics
+        * New: If supported by the system (Windows 10 1803+), a new stabilized frame rate controller will be enabled instead of the original rate-limiting frame rate controller (only limiting the frame rate, not compensating for it), the goal of the new frame rate controller is to compensate for the time error of each frame to make the screen display as stable as possible, and to minimize the jitter of the screen.
+    * Graphics/Rendering
+        * Fix: Sometimes when switching to another window and back, there would be dropped frames, increased latency, etc., which is now theoretically fixed (Microsoft: I fixed most of the frame-latency issues, but I kept some of them, and I'm not sure how much of them I'm going to fix. (Microsoft: I fixed most of the frame delay issues, but I kept some of them, I think keeping some of the features is how you know you're using Windows 10+)
 * LuaSTG Sub v0.20.7
-    * 资源管理
-        * 修改：使用性能、质量更高的 `xxhash` 库来计算资源名称 hash 值
-    * 游戏对象
-        * 移除：移除 LuaSTG Ex Plus 为游戏对象添加的 `pause` 和 `rmove` 属性，这两个属性使用量及其稀少，但却容易误用并导致难以察觉的问题
-    * Lua 拓展库
-        * 修复：修复 `lfs` 文件系统库中有一个未捕获的异常的问题
+    * Resource management
+        * Modification: use the higher performance, higher quality `xxhash` library to compute resource name hash values.
+    * Game Objects
+        * Removal: remove the `pause` and `rmove` attributes added to game objects by LuaSTG Ex Plus, which were used sparingly but could be easily misused and lead to unnoticeable problems.
+    * Lua extension library
+        * Fix: Fix an uncaught exception in the `lfs` filesystem library.
 * LuaSTG Sub v0.20.6
-    * 引擎基础
-        * 更新：更新 `luajit` 库，现在 `luajit` 支持捕获 `__gc` 元方法的错误
-    * 图形/渲染
-        * 修改：现在程序启动时如果检测不到可用的显卡硬件，将会弹窗报错并显示明确的原因
-        * 修改：现在允许使用软件显示适配器（在没有显卡硬件的情况下）运行 LuaSTG Sub，需要指定 `--allow-soft-adapter` 命令行参数，需要注意的是软件显示适配器性能不足以流畅运行程序，仅用于开发、测试、临时或应急情况下使用
-        * 修改：当窗口和画布的宽度或高度相等，且窗口尺寸大于或等于画布尺寸时，使用速度更快的直接复制而不是常规渲染来显示画面
-    * Lua 拓展库
-        * 新增：新增 `luasocket` 网络库，需要注意的是仅包含 `socket.core` 模块，lua 脚本部分请从 `luasocket` 官方仓库获取
-* LuaSTG Sub v0.20.5
-    * 平台
-        * 修改：现在要求 Windows 7 操作系统必须安装 `KB2533623` 补丁（或者后继替代该补丁的其他补丁）
-    * 图形/渲染
-        * 修改：内置的基本渲染器所使用的着色器预编译为字节码，不再在运行时动态编译
-        * 修改：着色器编译库 `d3dcompiler_47.dll` 已改为按需加载，如果开发者没有用到模型渲染功能或者后处理特效功能，那么将不会加载
-    * 音频
-        * 修复：切换音频设备后，背景音乐不会继续播放
-    * Lua 虚拟机
-        * 修复：由于（未知的）历史原因，之前仅提供 `?.lua` 搜索路径，未默认提供 `?/init.lua` 搜索路径，现在已补上缺失的 `?/init.lua` 搜索路径
-    * 游戏对象
-        * 修复：修复了 `dx`、`dy` 的值在游戏对象创建后第 1 帧可能计算不正确的未定义行为，触发的原因是第 0 帧生成时记录 `lastx`、`lasty` 在 `lstg.New` 函数调用返回前，如果随后修改了游戏对象的 `x`、`y` 坐标，将导致记录的 `lastx`、`lasty` 并非期望的值
-        * 修复：修复了 `lstg.BoxCheck` 不包含边界的问题，并去除了意味不明的单参数重载
+    * Engine Basics
+        * Update: Updated `luajit` library, now `luajit` supports catching errors in `__gc` metamethods.
+    * Graphics/Rendering
+        * Fixed: now if the program does not detect available graphics hardware at startup, a popup window will report the error and show a clear reason why.
+        * Fixed: Now allow to run LuaSTG Sub with a software display adapter (without graphics hardware), you need to specify the `--allow-soft-adapter` command line parameter, note that the software display adapter is not powerful enough to run the program smoothly, it is only used for development, testing, temporary or emergency situations.
+        * Modify: When the width or height of the window and canvas are equal, and the window size is greater than or equal to the canvas size, use faster direct copy instead of regular rendering to display the screen.
+    * Lua extension library
+        * New: add `luasocket` network library, please note that only `socket.core` module is included, please get the lua script part from `luasocket` official repository.
+* LuaSTG Sub v0.20.5.
+    * Platform
+        * Changed: Windows 7 is now required to have patch `KB2533623` (or a successor to this patch) installed.
+    * Graphics/Rendering
+        * Changed: Shaders used by the built-in base renderer are precompiled into bytecode and are no longer dynamically compiled at runtime.
+        * Modification: the shader compilation library `d3dcompiler_47.dll` has been changed to be loaded on-demand, so that it will not be loaded if the developer does not use the model rendering feature or the post-processing effects feature.
+    * Audio
+        * Fixed: background music does not continue to play after switching audio devices.
+    * Lua Virtual Machine
+        * Fix: For (unknown) historical reasons, only `? /init.lua` search path was not provided by default * Audio * Fix: For (unknown) historical reasons, only the `? /init.lua` search path, the missing `? /init.lua` search path has been added.
+    * Game objects
+        * Fix: Fixed undefined behavior where `dx`, `dy` values could be computed incorrectly on frame 1 after game object creation, triggered by the fact that recording `lastx`, `lasty` on frame 0 generation before the return of the `lstg.New` function call would result in the recorded `lastx`, `lasty` values not being the expected values if the `x`, `y` coordinates of the game object were subsequently modified. lasty` were not the expected values
+        * Fix: Fixed `lstg.BoxCheck` not containing bounds, and removed unintended single-argument overloading.
 * LuaSTG Sub v0.20.4
-    * 音频
-        * 修改：现在音频系统支持从错误中恢复，或者在无音频设备的计算机上以空白模式继续运行
+    * Audio
+        * Modification: the audio system now supports recovering from an error or continuing to run in blank mode on a computer without an audio device
 * LuaSTG Sub v0.20.3
-    * 引擎基础
-        * 修改：现在可以通过配置文件来指定 `log` 日志文件的储存位置，详情请参考 `doc/specification/引擎配置文件.md` 文档
-    * 数学
-        * 修改：随机数发生器 `lstg.Rand:Int` 和 `lstg.Rand:Float` 方法不再要求第二个参数大于或等于第一个参数
-* LuaSTG Sub v0.20.2
-    * 窗口
-        * 修复：修复了按住 `Alt` 键的同时切换到别的窗口后会导致引擎一直以为 `Alt` 键处于按下状态
-    * 图形/渲染
-        * 修复：修复了 `lstg.Render`、`lstg.RenderRect`、`lstg.Render4V`、`lstg.RenderAnimation` 在找不到资源时不抛出错误的问题
+    * Engine Basics
+        * Changed: It is now possible to specify where the `log` log file is stored via a configuration file, see the `doc/specification/engine-configuration-file.md` document for details.
+    * Math
+        * Changed: The random number generator `lstg.Rand:Int` and `lstg.Rand:Float` methods no longer require the second argument to be greater than or equal to the first.
+* LuaSTG Sub v0.20.2.
+    * Windows
+        * Fix: Fixed the problem where holding down the `Alt` key while switching to another window would cause the engine to keep thinking the `Alt` key was pressed.
+    * Graphics/Rendering
+        * Fix: Fixed `lstg.Render`, `lstg.RenderRect`, `lstg.Render4V`, and `lstg.RenderAnimation` not throwing an error when a resource was not found.
 * LuaSTG Sub v0.20.1
-    * 引擎基础
-        * 移除：不再使用 `fancylib` 库
+    * Engine Basics
+        * Removed: `fancylib` library is no longer used.
