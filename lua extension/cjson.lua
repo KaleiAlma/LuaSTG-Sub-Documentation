@@ -1,4 +1,4 @@
----@meta
+---@meta cjson
 --- LuaSTG Sub Extension Documentation: JSON Parsing
 --------------------------------------------------------------------------------
 

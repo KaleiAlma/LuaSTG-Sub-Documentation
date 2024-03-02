@@ -1,8 +1,6 @@
----@meta
+---@meta lfs
 --- LuaSTG Sub Extension Documentation: Lua File System
 --------------------------------------------------------------------------------
---- For overloading functions
----@diagnostic disable:duplicate-set-field
 
 ---@class lfs
 local M = {}

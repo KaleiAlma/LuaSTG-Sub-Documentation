@@ -1,8 +1,6 @@
----@meta
+---@meta random
 --- LuaSTG Sub Extension Documentation: Random Number Generation
 --------------------------------------------------------------------------------
---- For overloading functions
----@diagnostic disable:duplicate-set-field
 
 --------------------------------------------------------------------------------
 
