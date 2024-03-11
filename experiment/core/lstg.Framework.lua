@@ -21,3 +21,23 @@ end
 ---@return lstg.MonitorInfo[]
 function lstg.ListMonitor()
 end
+
+---@param width integer
+---@param height integer
+---@param vsync boolean
+---@param monitor integer
+function lstg.VideoModeWindowed(width, height, vsync, monitor)
+end
+
+---@param width integer
+---@param height integer
+---@param vsync boolean
+---@param monitor integer
+function lstg.VideoModeFSBorderless(width, height, vsync, monitor)
+end
+
+---@param width integer
+---@param height integer
+---@param vsync boolean
+function lstg.VideoModeFSExclusive(width, height, vsync)
+end
